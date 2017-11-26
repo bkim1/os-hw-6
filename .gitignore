@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+# But not these files
+!src/*.c
+!src/*/*.c
+!.gitignore
+!src/*/Makefile
+
+# ...even if they are in subdirectories
+!*/
+
