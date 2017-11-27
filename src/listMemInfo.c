@@ -11,6 +11,9 @@ typedef struct memInfo {
     long int rss;
     long int min_flt;
     long int maj_flt;
+    long int state;
+    long int sys_time;
+    long int user_time;
 } memInfo;
 
 struct memInfo **listMem;
@@ -28,13 +31,17 @@ void dfs(struct task_struct *task, int size) {
         for (i = 0; i < size; i++) {
             if (proc_pid == listMem[i]->pid) {
                 // Set proc info for struct
-                listMem[i]->vms = get_mm_hiwater_vm(child->mm);
-                listMem[i]->rss = get_mm_hiwater_rss(child->mm);
+                listMem[i]->vms = get_mm_hiwater_vm(child->mm) * 4;
+                listMem[i]->rss = get_mm_hiwater_rss(child->mm) * 4;
                 listMem[i]->min_flt = child->min_flt;
                 listMem[i]->maj_flt = child->maj_flt;
+                listMem[i]->state = child->state;
+                listMem[i]->sys_time = child->stime;
+                listMem[i]->user_time = child->utime;
                 printk("PID: %ld\n", proc_pid);
                 printk("MajFlts: %ld  MinFlts: %ld\n", child->maj_flt, child->min_flt);
                 printk("VM: %ld  RSS: %ld\n", get_mm_hiwater_vm(child->mm), get_mm_hiwater_rss(child->mm));
+                printk("State: %ld System Time: %ld User Time: %ld\n", child->state, child->stime, child->utime);
                 break;
             }
         }

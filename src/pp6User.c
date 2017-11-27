@@ -10,6 +10,9 @@ typedef struct memInfo {
     long int rss;
     long int min_flt;
     long int maj_flt;
+    long int state;
+    long int sys_time;
+    long int user_time;
 } memInfo;
 
 int main(int argc, char *argv[]) {
@@ -20,7 +23,7 @@ int main(int argc, char *argv[]) {
     for (i = 1; i < argc; i++) {
         pid = atoi(argv[i]);
         memInfo *temp = malloc(sizeof(struct memInfo));
-        *temp = (memInfo){ pid, 0, 0, 0, 0 };
+        *temp = (memInfo){ pid, 0, 0, 0, 0, 0, 0, 0 };
         user[i-1] = temp;
     }
 
@@ -35,6 +38,7 @@ int main(int argc, char *argv[]) {
             printf("----- PID: %ld -----\n", ret[i]->pid);
             printf("Major Faults: %ld  Minor Faults: %ld\n", ret[i]->maj_flt, ret[i]->min_flt);
             printf("VMS: %ld  RSS: %ld\n", ret[i]->vms, ret[i]->rss);
+            printf("State: %ld System Time: %ld User Time: %ld\n", ret[i]->state, ret[i]->sys_time, ret[i]->user_time);
         }
     }
     else {
